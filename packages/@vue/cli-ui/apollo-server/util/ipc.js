@@ -7,7 +7,6 @@ ipc.config.retry = 1500
 ipc.config.silent = true
 
 const listeners = []
-
 ipc.serve(() => {
   ipc.server.on('message', (data, socket) => {
     log('IPC message', dumpObject(data))
@@ -45,6 +44,27 @@ function send (data) {
   log('IPC send', dumpObject(data))
   ipc.server.broadcast('message', data)
 }
+
+
+function ipcOn (cb) {
+  const handler = cb._handler = ({ data, emit }) => {
+    if (data._projectId) {
+      if (data._projectId === this.project.id) {
+        data = data._data
+      } else {
+        return
+      }
+    }
+    // eslint-disable-next-line node/no-callback-literal
+    cb({ data, emit })
+  }
+  return on(handler)
+}
+
+ipcOn(({ data, emit }) => {
+  console.log(emit)
+  send(data)
+})
 
 module.exports = {
   on,

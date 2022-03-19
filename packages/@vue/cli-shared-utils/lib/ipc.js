@@ -82,7 +82,7 @@ exports.IpcMessenger = class IpcMessenger {
       this.queue && this.queue.forEach(data => this.send(data))
       this.queue = null
 
-      ipc.of[this.id].on('message', this._onMessage)
+      ipc.of[this.id].on('message', this._onMessage.bind(this))
     })
   }
 
