@@ -6,9 +6,13 @@ const ipc = new Server({
 })
 
 const listeners = []
+const simpleTypes = [
+  'string',
+  'number',
+  'boolean'
+]
 
 const dumpObject = (obj) => {
-  if (!process.env.VUE_APP_CLI_UI_DEBUG) return
   const result = {}
   Object.keys(obj).forEach(key => {
     const value = obj[key]
